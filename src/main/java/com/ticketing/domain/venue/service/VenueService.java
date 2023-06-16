@@ -1,7 +1,9 @@
 package com.ticketing.domain.venue.service;
 
-import com.ticketing.domain.venue.dto.VenueCreateReq;
-import com.ticketing.domain.venue.dto.VenueCreateRes;
+import com.ticketing.domain.member.admin.entity.Admin;
+import com.ticketing.domain.member.admin.service.AdminService;
+import com.ticketing.domain.venue.dto.request.VenueCreateReq;
+import com.ticketing.domain.venue.dto.response.VenueCreateRes;
 import com.ticketing.domain.venue.entity.Venue;
 import com.ticketing.domain.venue.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,14 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class VenueService {
 
   private final VenueRepository venueRepository;
+  private final AdminService adminService;
 
-  public VenueService(VenueRepository venueRepository) {
+  public VenueService(VenueRepository venueRepository, AdminService adminService) {
     this.venueRepository = venueRepository;
+    this.adminService = adminService;
   }
 
   @Transactional
-  public VenueCreateRes creat(VenueCreateReq venueCreateReq) {
-    Venue savedVenue = venueRepository.save(venueCreateReq.toEntity());
+  public VenueCreateRes creat(VenueCreateReq venueCreateReq, Long venueManagerId) {
+    Admin venueManager = adminService.getBy(venueManagerId);
+    Venue savedVenue = venueRepository.save(venueCreateReq.toEntity(venueManager));
+
     return VenueCreateRes.from(savedVenue);
   }
 

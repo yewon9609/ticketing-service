@@ -1,10 +1,11 @@
 package com.ticketing.presentation.venue;
 
-import com.ticketing.domain.venue.dto.VenueCreateReq;
-import com.ticketing.domain.venue.dto.VenueCreateRes;
+import com.ticketing.domain.venue.dto.request.VenueCreateReq;
+import com.ticketing.domain.venue.dto.response.VenueCreateRes;
 import com.ticketing.domain.venue.service.VenueService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +21,14 @@ public class VenueController {
     this.venueService = venueService;
   }
 
-  @PostMapping
+  @PostMapping("{venueManagerId}")
   public ResponseEntity<VenueCreateRes> create(
-      @RequestBody @Valid VenueCreateReq venueCreateReq
+      @RequestBody @Valid VenueCreateReq venueCreateReq,
+      @PathVariable Long venueManagerId
+
   ) {
-    VenueCreateRes venueCreateRes = venueService.creat(venueCreateReq);
+    VenueCreateRes venueCreateRes = venueService.creat(venueCreateReq, venueManagerId);
     return ResponseEntity.ok(venueCreateRes);
   }
-
 
 }

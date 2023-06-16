@@ -1,10 +1,18 @@
 package com.ticketing.domain.venue.entity;
 
+import static com.ticketing.global.exception.ErrorCode.NOT_VENUE_MANAGER;
+
+import com.ticketing.domain.member.admin.entity.Admin;
+import com.ticketing.domain.member.admin.entity.Role;
+import com.ticketing.domain.member.admin.exception.UnauthorizedException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import java.util.regex.Pattern;
 import org.springframework.util.Assert;
 
@@ -31,16 +39,22 @@ public class Venue {
   @Column(nullable = false)
   private int totalSeats;
 
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "admin_id", referencedColumnName = "id")
+  private Admin admin;
+
   protected Venue() {
   }
 
-  public Venue(String name, String address, String phoneNumber, int totalSeats) {
+  public Venue(String name, String address, String phoneNumber, int totalSeats, Admin admin) {
+    validRole(admin);
     validPhoneNumber(phoneNumber);
     validTotalSeats(totalSeats);
     this.name = name;
     this.address = address;
     this.phoneNumber = phoneNumber;
     this.totalSeats = totalSeats;
+    this.admin = admin;
   }
 
   public Long getId() {
@@ -63,6 +77,16 @@ public class Venue {
     return totalSeats;
   }
 
+  public Admin getAdmin() {
+    return admin;
+  }
+
+  private void validRole(Admin admin) {
+    if (!admin.getRole().equals(Role.VENUE_MANAGER)) {
+      throw new UnauthorizedException(NOT_VENUE_MANAGER);
+    }
+  }
+
   public void validPhoneNumber(String phoneNumber) {
     Assert.isTrue(PHONE_NUMBER_PATTERN.matcher(phoneNumber).matches(), OUT_OF_FORMAT);
   }
@@ -70,4 +94,5 @@ public class Venue {
   public void validTotalSeats(int totalSeats) {
     Assert.isTrue(totalSeats > 0, LESS_THAN_ZERO);
   }
+
 }
