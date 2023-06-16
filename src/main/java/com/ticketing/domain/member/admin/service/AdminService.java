@@ -1,7 +1,7 @@
 package com.ticketing.domain.member.admin.service;
 
-import com.ticketing.domain.member.admin.dto.AdminCreateReq;
-import com.ticketing.domain.member.admin.dto.AdminCreateRes;
+import com.ticketing.domain.member.admin.dto.request.AdminCreateReq;
+import com.ticketing.domain.member.admin.dto.response.AdminCreateRes;
 import com.ticketing.domain.member.admin.entity.Admin;
 import com.ticketing.domain.member.admin.repository.AdminRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,4 +27,5 @@ public class AdminService {
   public Admin getBy(Long id) {
     return adminRepository.findById(id).orElseThrow(EntityNotFoundException::new);
   }
+
 }

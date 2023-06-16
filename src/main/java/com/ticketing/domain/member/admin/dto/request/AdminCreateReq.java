@@ -1,31 +1,47 @@
-package com.ticketing.domain.member.admin.dto;
+package com.ticketing.domain.member.admin.dto.request;
 
 import com.ticketing.domain.member.MemberInfo;
 import com.ticketing.domain.member.admin.entity.Admin;
 import com.ticketing.domain.member.admin.entity.Role;
 import com.ticketing.domain.member.customer.entity.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public record AdminCreateReq(
+
     @NotBlank
+    @Size(max = 20)
     String name,
+
     @NotBlank
     @Pattern(regexp = "^[\\w-.]+@[\\w-]+.[\\w.]+$")
+    @Size(max = 50)
     String mailPath,
+
     @NotBlank
+    @Size(max = 30)
     String password,
-    @NotBlank
-    String birthYear,
+
+    @Min(1900)
+    int birthYear,
+
     @NotBlank
     String businessLicense,
+
     @NotNull
     Role role
+
 ) {
 
   public Admin toEntity() {
-    return new Admin(new MemberInfo(name, new Email(mailPath), password, birthYear),
-        businessLicense, role);
+    return new Admin(
+        new MemberInfo(name, new Email(mailPath), password, birthYear),
+        businessLicense,
+        role
+    );
   }
+
 }
