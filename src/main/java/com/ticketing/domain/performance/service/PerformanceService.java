@@ -2,12 +2,13 @@ package com.ticketing.domain.performance.service;
 
 import com.ticketing.domain.member.admin.entity.Admin;
 import com.ticketing.domain.member.admin.service.AdminService;
-import com.ticketing.domain.performance.dto.PerformanceCreateReq;
-import com.ticketing.domain.performance.dto.PerformanceCreateRes;
+import com.ticketing.domain.performance.dto.request.PerformanceCreateReq;
+import com.ticketing.domain.performance.dto.response.PerformanceCreateRes;
 import com.ticketing.domain.performance.entity.Performance;
 import com.ticketing.domain.performance.repository.PerformanceRepository;
 import com.ticketing.domain.venue.entity.Venue;
 import com.ticketing.domain.venue.service.VenueService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,4 +35,10 @@ public class PerformanceService {
 
     return PerformanceCreateRes.from(performance);
   }
+
+  public Performance getBy(Long performanceId) {
+    return performanceRepository.findById(performanceId)
+        .orElseThrow(EntityNotFoundException::new);
+  }
+
 }
