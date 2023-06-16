@@ -4,6 +4,7 @@ import com.ticketing.domain.member.customer.entity.Email;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
+import jakarta.validation.constraints.Min;
 import java.time.LocalDate;
 import java.util.Objects;
 import org.springframework.util.Assert;
@@ -12,6 +13,7 @@ import org.springframework.util.Assert;
 public class MemberInfo {
 
   private static final int CURRENT_YEAR = LocalDate.now().getYear();
+  private static final String BIRTH_YEAR_ERROR_MSG = "탄생년이 올바르지 않습니다";
 
   @Column(nullable = false, length = 30)
   private String name;
@@ -22,22 +24,23 @@ public class MemberInfo {
   @Column(nullable = false, length = 30)
   private String password;
 
-  @Column(nullable = false, length = 4)
-  private String birthYear;
+  @Column(nullable = false)
+  @Min(1900)
+  private int birthYear;
 
   protected MemberInfo() {
   }
 
-  public MemberInfo(String name, Email email, String password, String birthYear) {
+  public MemberInfo(String name, Email email, String password, int birthYear) {
     validateBirthYear(birthYear);
     this.name = Objects.requireNonNull(name);
     this.email = Objects.requireNonNull(email);
     this.password = Objects.requireNonNull(password);
-    this.birthYear = Objects.requireNonNull(birthYear);
+    this.birthYear = birthYear;
   }
 
-  private void validateBirthYear(String birthYear) {
-    Assert.isTrue(CURRENT_YEAR <= Integer.parseInt(birthYear), "탄생년이 올바르지 않습니다");
+  private void validateBirthYear(int birthYear) {
+    Assert.isTrue(CURRENT_YEAR >= birthYear, BIRTH_YEAR_ERROR_MSG);
   }
 
   public String getName() {
@@ -52,7 +55,7 @@ public class MemberInfo {
     return password;
   }
 
-  public String getBirthYear() {
+  public int getBirthYear() {
     return birthYear;
   }
 

@@ -1,10 +1,12 @@
 package com.ticketing.domain.performance.entity;
 
+import static com.ticketing.global.exception.ErrorCode.NOT_AVAILABLE_AGE;
 import static com.ticketing.global.exception.ErrorCode.NOT_PERFORMANCE_MANAGER;
 
 import com.ticketing.domain.member.admin.entity.Admin;
 import com.ticketing.domain.member.admin.entity.Role;
 import com.ticketing.domain.member.admin.exception.UnauthorizedException;
+import com.ticketing.domain.performance.exception.NotAvalilableAgeException;
 import com.ticketing.domain.venue.entity.Venue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -14,6 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -26,6 +29,7 @@ public class Performance {
   @Column(nullable = false, length = 50)
   private String title;
 
+  @Lob
   @Column(nullable = false)
   private String thumbnail;
 
@@ -35,11 +39,8 @@ public class Performance {
   @Column(nullable = false)
   private int viewingAge;
 
-  @Column(nullable = false)
-  private int seatPrice;
-
-  @Column(nullable = false)
-  private int capacity;
+  @Embedded
+  private Seat seat;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn
@@ -52,20 +53,19 @@ public class Performance {
   protected Performance() {
   }
 
-  public Performance(String title, String thumbnail, Schedule schedule, int viewingAge,
-      int seatPrice, int capacity, Venue venue, Admin admin) {
-    checkRole(admin);
+  public Performance(String title, String thumbnail, Schedule schedule, int viewingAge, Seat seat,
+      Venue venue, Admin admin) {
+    validRole(admin);
     this.title = title;
     this.thumbnail = thumbnail;
     this.schedule = schedule;
     this.viewingAge = viewingAge;
-    this.seatPrice = seatPrice;
-    this.capacity = capacity;
+    this.seat = seat;
     this.venue = venue;
     this.admin = admin;
   }
 
-  private void checkRole(Admin admin) {
+  private void validRole(Admin admin) {
     if (!admin.getRole().equals(Role.PERFORMANCE_MANAGER)) {
       throw new UnauthorizedException(NOT_PERFORMANCE_MANAGER);
     }
@@ -91,8 +91,8 @@ public class Performance {
     return viewingAge;
   }
 
-  public int getSeatPrice() {
-    return seatPrice;
+  public Seat getSeat() {
+    return seat;
   }
 
   public Venue getVenue() {
@@ -103,7 +103,10 @@ public class Performance {
     return admin;
   }
 
-  public int getCapacity() {
-    return capacity;
+  public void checkPossibleViewingAge(int age) {
+    if (viewingAge > age) {
+      throw new NotAvalilableAgeException(NOT_AVAILABLE_AGE);
+    }
   }
+
 }
