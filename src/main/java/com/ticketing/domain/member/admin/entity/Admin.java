@@ -47,4 +47,7 @@ public class Admin {
     return role;
   }
 
+  public MemberInfo getMemberInfo() {
+    return memberInfo;
+  }
 }

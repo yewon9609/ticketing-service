@@ -6,9 +6,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDate;
 
 @Entity
 public class Customer {
+
+  private static final int KOREA_AGE = 1;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +34,11 @@ public class Customer {
   public MemberInfo getMemberInfo() {
     return memberInfo;
   }
+
+  public int getAge() {
+    int currentYear = LocalDate.now()
+        .getYear();
+    return currentYear - memberInfo.getBirthYear() + KOREA_AGE;
+  }
+
 }
