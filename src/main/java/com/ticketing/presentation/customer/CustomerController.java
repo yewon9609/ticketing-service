@@ -1,8 +1,9 @@
 package com.ticketing.presentation.customer;
 
-import com.ticketing.domain.member.customer.dto.CustomerCreateReq;
-import com.ticketing.domain.member.customer.dto.CustomerCreateRes;
+import com.ticketing.domain.member.customer.dto.request.CustomerCreateReq;
+import com.ticketing.domain.member.customer.dto.response.CustomerCreateRes;
 import com.ticketing.domain.member.customer.service.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,9 +23,10 @@ public class CustomerController {
 
   @PostMapping
   public ResponseEntity<CustomerCreateRes> signUp(
-      @RequestBody CustomerCreateReq createReq
+      @RequestBody @Valid CustomerCreateReq createReq
   ) {
     CustomerCreateRes createRes = customerService.create(createReq);
     return ResponseEntity.status(HttpStatus.CREATED).body(createRes);
   }
+
 }

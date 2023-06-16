@@ -1,8 +1,9 @@
 package com.ticketing.presentation.performance;
 
-import com.ticketing.domain.performance.dto.PerformanceCreateReq;
-import com.ticketing.domain.performance.dto.PerformanceCreateRes;
+import com.ticketing.domain.performance.dto.request.PerformanceCreateReq;
+import com.ticketing.domain.performance.dto.response.PerformanceCreateRes;
 import com.ticketing.domain.performance.service.PerformanceService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,10 +24,11 @@ public class PerformanceController {
 
   @PostMapping("/{adminId}")
   public ResponseEntity<PerformanceCreateRes> create(
-      @RequestBody PerformanceCreateReq createReq,
+      @RequestBody @Valid PerformanceCreateReq createReq,
       @PathVariable Long adminId
   ) {
     PerformanceCreateRes createRes = performanceService.create(createReq, adminId);
     return ResponseEntity.status(HttpStatus.CREATED).body(createRes);
   }
+
 }
