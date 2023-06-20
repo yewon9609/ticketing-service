@@ -1,4 +1,4 @@
-package com.ticketing.global.infra.redis.config;
+package com.ticketing.infra.redis.config;
 
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;

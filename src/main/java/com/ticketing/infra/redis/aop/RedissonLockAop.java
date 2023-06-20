@@ -1,7 +1,7 @@
-package com.ticketing.global.infra.redis.aop;
+package com.ticketing.infra.redis.aop;
 
 import com.ticketing.domain.aop.annotation.DistributedLock;
-import com.ticketing.global.infra.redis.config.CustomSpringELParser;
+import com.ticketing.infra.redis.config.CustomSpringELParser;
 import java.lang.reflect.Method;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -12,6 +12,7 @@ import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.TransactionTimedOutException;
 
 @Aspect
 @Component
@@ -37,6 +38,7 @@ public class RedissonLockAop {
     String key =
         REDISSON_LOCK_PREFIX + CustomSpringELParser.getDynamicValue(signature.getParameterNames(),
             joinPoint.getArgs(), distributedLock.key());
+
     RLock rLock = redissonClient.getLock(key);
 
     try {
@@ -47,17 +49,14 @@ public class RedissonLockAop {
       }
 
       return aopForTransaction.proceed(joinPoint);
-
-    } catch (InterruptedException e) {
-      throw new InterruptedException();
-
+    } catch (InterruptedException |TransactionTimedOutException e) {
+      throw e;
     } finally {
       try {
         rLock.unlock();
       } catch (IllegalMonitorStateException e) {
-        log.info("Redisson Lock Already UnLock");
+        log.info("이미 락이 해제 된 상태입니다");
       }
-
     }
   }
 
