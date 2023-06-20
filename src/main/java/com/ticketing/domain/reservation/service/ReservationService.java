@@ -8,7 +8,6 @@ import com.ticketing.domain.reservation.dto.ReservationCreateReq;
 import com.ticketing.domain.reservation.dto.ReservationCreateRes;
 import com.ticketing.domain.reservation.entity.Reservation;
 import com.ticketing.domain.reservation.repository.ReservationRepository;
-import com.ticketing.domain.aop.annotation.DistributedLock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,26 +26,20 @@ public class ReservationService {
     this.customerService = customerService;
   }
 
-  @DistributedLock(key = "#createReq.performanceId")
+  @Transactional
   public ReservationCreateRes create(ReservationCreateReq createReq, Long customerId) {
-    Customer customer = customerService.getBy(customerId);
-    Performance performance = checkAvailabilityOfReservations(createReq, customer);
 
+    Customer customer = customerService.getBy(customerId);
+    Performance performance = performanceService.getBy(createReq.performanceId());
+
+    performance.checkPossibleViewingAge(customer.getAge());
     performance.getSeat()
         .subtractBy(createReq.ticketCount());
+
     Reservation reservation = reservationRepository.save(
         createReq.toEntity(performance, customer)
     );
 
     return ReservationCreateRes.from(reservation);
   }
-
-  private Performance checkAvailabilityOfReservations(ReservationCreateReq createReq, Customer customer) {
-    Performance performance = performanceService.getBy(createReq.performanceId());
-    performance.checkPossibleViewingAge(customer.getAge());
-
-    return performance;
-  }
-
-
 }
