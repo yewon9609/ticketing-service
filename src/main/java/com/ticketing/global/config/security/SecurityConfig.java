@@ -32,13 +32,16 @@ public class SecurityConfig {
 
     @Qualifier("delegatedAuthenticationEntryPoint")
     private final AuthenticationEntryPoint authEntryPoint;
+    @Qualifier("delegatedAccessDeniedHandler")
+    private final DelegatedAccessDeniedHandler accessDeniedHandler;
     private final CustomerJwtTokenProvider jwtTokenProvider;
     private final ObjectMapper objectMapper;
 
     public CustomerSecurityConfig(AuthenticationEntryPoint authEntryPoint,
-        CustomerJwtTokenProvider jwtTokenProvider,
+        DelegatedAccessDeniedHandler accessDeniedHandler, CustomerJwtTokenProvider jwtTokenProvider,
         ObjectMapper objectMapper) {
       this.authEntryPoint = authEntryPoint;
+      this.accessDeniedHandler = accessDeniedHandler;
       this.jwtTokenProvider = jwtTokenProvider;
       this.objectMapper = objectMapper;
     }
@@ -47,9 +50,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer1() {
       return web -> web.ignoring()
           .requestMatchers("/docs/rest-docs.html")
-          .requestMatchers("/api/admins/signup")
           .requestMatchers("/api/customers/signup")
-          .requestMatchers("/api/admins/login")
           .requestMatchers("/api/customers/login")
           .requestMatchers("/favicon.ico/**")
           ;
@@ -62,16 +63,24 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain customerFilterChain(HttpSecurity http) throws Exception {
-      http.csrf(AbstractHttpConfigurer::disable)
+      http.securityMatcher("/api/customers/**", "/api/reservations/**")
+          .httpBasic(AbstractHttpConfigurer::disable)
+          .formLogin(AbstractHttpConfigurer::disable)
+          .csrf(AbstractHttpConfigurer::disable)
           .headers(authorize -> authorize.frameOptions(FrameOptionsConfig::disable))
+          .sessionManagement(
+              session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
           .authorizeHttpRequests(requests -> requests
               .requestMatchers("customers/signup", "customers/login").permitAll()
-              .anyRequest().authenticated())
+              .requestMatchers(HttpMethod.POST, "/api/reservations").hasRole("CUSTOMER")
+              .anyRequest()
+              .authenticated())
           .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, objectMapper),
               UsernamePasswordAuthenticationFilter.class)
-          .exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPoint));
+          .exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPoint))
+          .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler));
 
-      return http.build();
+      return http.getOrBuild();
     }
   }
 
@@ -82,14 +91,18 @@ public class SecurityConfig {
 
     @Qualifier("delegatedAuthenticationEntryPoint")
     private final AuthenticationEntryPoint authEntryPoint;
+    @Qualifier("delegatedAccessDeniedHandler")
+    private final DelegatedAccessDeniedHandler accessDeniedHandler;
     private final AdminJwtTokenProvider jwtTokenProvider;
     private final ObjectMapper objectMapper;
 
     public AdminSecurityConfig(AdminJwtTokenProvider jwtTokenProvider,
-        ObjectMapper objectMapper, AuthenticationEntryPoint authEntryPoint) {
+        ObjectMapper objectMapper, AuthenticationEntryPoint authEntryPoint,
+        DelegatedAccessDeniedHandler accessDeniedHandler) {
       this.jwtTokenProvider = jwtTokenProvider;
       this.objectMapper = objectMapper;
       this.authEntryPoint = authEntryPoint;
+      this.accessDeniedHandler = accessDeniedHandler;
     }
 
     @Bean
@@ -97,9 +110,7 @@ public class SecurityConfig {
       return web -> web.ignoring()
           .requestMatchers("/docs/rest-docs.html")
           .requestMatchers("/api/admins/signup")
-          .requestMatchers("/api/customers/signup")
           .requestMatchers("/api/admins/login")
-          .requestMatchers("/api/customers/login")
           .requestMatchers("/favicon.ico/**")
           ;
     }
@@ -107,7 +118,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
-      http.csrf(AbstractHttpConfigurer::disable)
+      http.securityMatcher("/api/admins/**", "/api/venues/**")
+          .httpBasic(AbstractHttpConfigurer::disable)
+          .formLogin(AbstractHttpConfigurer::disable)
+          .csrf(AbstractHttpConfigurer::disable)
           .headers(authorize -> authorize.frameOptions(FrameOptionsConfig::disable))
           .sessionManagement(
               session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -117,14 +131,13 @@ public class SecurityConfig {
               .requestMatchers("/admins/**").hasAnyRole("PERFORMANCE_MANAGER", "VENUE_MANAGER")
               .requestMatchers(HttpMethod.POST, "/api/performances").hasRole("PERFORMANCE_MANAGER")
               .requestMatchers(HttpMethod.POST, "/api/venues").hasRole("VENUE_MANAGER")
-              .requestMatchers("/api/performances/**").hasRole("PERFORMANCE_MANAGER")
-              .requestMatchers("/api/venues/**").hasRole("VENUE_MANAGER")
               .anyRequest()
               .authenticated())
           .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, objectMapper),
               UsernamePasswordAuthenticationFilter.class)
-          .exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPoint));
-      return http.build();
+          .exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPoint))
+          .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler));
+      return http.getOrBuild();
     }
   }
 
