@@ -12,7 +12,7 @@ public class CustomUserDetails {
   private CustomUserDetails() {
   }
 
-  static class CustomerInfo implements UserDetails {
+  public static class CustomerInfo implements UserDetails {
 
     private final Customer customer;
 
@@ -63,7 +63,7 @@ public class CustomUserDetails {
   }
 
 
-  static class AdminInfo implements UserDetails {
+  public static class AdminInfo implements UserDetails {
 
     private final Admin admin;
 
@@ -112,12 +112,6 @@ public class CustomUserDetails {
       return false;
     }
 
-    @Override
-    public String toString() {
-      return "AdminInfo{" +
-          "admin=" + admin.toString() +
-          '}';
-    }
   }
 
 }

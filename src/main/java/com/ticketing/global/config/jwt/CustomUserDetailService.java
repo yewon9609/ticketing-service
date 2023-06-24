@@ -17,7 +17,7 @@ public class CustomUserDetailService {
   }
 
   @Service
-  static class CustomAdminDetailService implements UserDetailsService {
+  public static class CustomAdminDetailService implements UserDetailsService {
 
     private final AdminRepository adminRepository;
 
@@ -39,7 +39,7 @@ public class CustomUserDetailService {
   }
 
   @Service
-  static class CustomCustomerDetailService implements UserDetailsService {
+  public static class CustomCustomerDetailService implements UserDetailsService {
 
     private final CustomerRepository customerRepository;
 
