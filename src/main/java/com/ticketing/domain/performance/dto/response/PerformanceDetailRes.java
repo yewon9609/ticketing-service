@@ -16,13 +16,11 @@ public record PerformanceDetailRes(
 
     int seatPrice,
 
-    int remainderSeats,
-
     String venueName,
 
     String venueAddress,
 
-    String phoneNumber
+    String venuePhoneNumber
 ) {
   public static PerformanceDetailRes from(Performance performance) {
     return new PerformanceDetailRes(
@@ -33,8 +31,6 @@ public record PerformanceDetailRes(
       performance.getViewingAge(),
       performance.getSeat()
           .getPrice(),
-      performance.getSeat()
-          .getCapacity(),
       performance.getVenue()
           .getName(),
       performance.getVenue()
