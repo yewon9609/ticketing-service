@@ -1,5 +1,6 @@
 package com.ticketing.domain.reservation.entity;
 
+import com.ticketing.domain.BaseTimeEntity;
 import com.ticketing.domain.member.customer.entity.Customer;
 import com.ticketing.domain.performance.entity.Performance;
 import jakarta.persistence.Column;
@@ -13,7 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Reservation {
+public class Reservation extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

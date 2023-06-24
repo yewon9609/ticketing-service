@@ -1,7 +1,8 @@
 package com.ticketing.domain.member.admin.entity;
 
-import com.ticketing.domain.member.MemberInfo;
-import com.ticketing.domain.member.Role;
+import com.ticketing.domain.BaseTimeEntity;
+import com.ticketing.domain.member.data.MemberInfo;
+import com.ticketing.domain.member.data.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -12,7 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Admin {
+public class Admin extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

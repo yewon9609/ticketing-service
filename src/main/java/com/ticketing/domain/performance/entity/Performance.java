@@ -3,8 +3,9 @@ package com.ticketing.domain.performance.entity;
 import static com.ticketing.global.exception.ErrorCode.NOT_AVAILABLE_AGE;
 import static com.ticketing.global.exception.ErrorCode.NOT_PERFORMANCE_MANAGER;
 
+import com.ticketing.domain.BaseTimeEntity;
 import com.ticketing.domain.member.admin.entity.Admin;
-import com.ticketing.domain.member.Role;
+import com.ticketing.domain.member.data.Role;
 import com.ticketing.domain.member.exception.UnauthorizedException;
 import com.ticketing.domain.performance.exception.NotAvalilableAgeException;
 import com.ticketing.domain.venue.entity.Venue;
@@ -20,7 +21,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Performance {
+public class Performance extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
