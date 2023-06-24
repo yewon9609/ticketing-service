@@ -1,11 +1,7 @@
 package com.ticketing.domain.venue.entity;
 
-import static com.ticketing.global.exception.ErrorCode.NOT_VENUE_MANAGER;
-
 import com.ticketing.domain.BaseTimeEntity;
-import com.ticketing.domain.member.data.Role;
 import com.ticketing.domain.member.admin.entity.Admin;
-import com.ticketing.domain.member.exception.UnauthorizedException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -48,7 +44,6 @@ public class Venue extends BaseTimeEntity {
   }
 
   public Venue(String name, String address, String phoneNumber, int totalSeats, Admin admin) {
-    validRole(admin);
     validPhoneNumber(phoneNumber);
     validTotalSeats(totalSeats);
     this.name = name;
@@ -80,12 +75,6 @@ public class Venue extends BaseTimeEntity {
 
   public Admin getAdmin() {
     return admin;
-  }
-
-  private void validRole(Admin admin) {
-    if (!admin.getRole().equals(Role.ROLE_VENUE_MANAGER)) {
-      throw new UnauthorizedException(NOT_VENUE_MANAGER);
-    }
   }
 
   public void validPhoneNumber(String phoneNumber) {
