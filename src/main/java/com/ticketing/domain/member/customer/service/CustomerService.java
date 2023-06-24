@@ -1,17 +1,17 @@
 package com.ticketing.domain.member.customer.service;
 
-import com.ticketing.domain.member.exception.DuplicatedEmailException;
 import com.ticketing.domain.member.customer.dto.request.CustomerCreateReq;
 import com.ticketing.domain.member.customer.dto.request.CustomerLoginReq;
 import com.ticketing.domain.member.customer.dto.response.CustomerCreateRes;
 import com.ticketing.domain.member.customer.dto.response.CustomerLoginRes;
 import com.ticketing.domain.member.customer.entity.Customer;
 import com.ticketing.domain.member.customer.repository.CustomerRepository;
+import com.ticketing.domain.member.exception.DuplicatedEmailException;
+import com.ticketing.domain.member.exception.NotFoundMemberException;
 import com.ticketing.global.config.jwt.JwtTokenProvider;
 import com.ticketing.global.config.jwt.JwtTokenProvider.CustomerJwtTokenProvider;
 import com.ticketing.global.exception.ErrorCode;
 import com.ticketing.infra.redis.util.RedisUtil;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,12 +42,12 @@ public class CustomerService {
 
   public Customer getBy(Long id) {
     return customerRepository.findById(id)
-        .orElseThrow(EntityNotFoundException::new);
+        .orElseThrow(() -> new NotFoundMemberException(ErrorCode.NOT_FOUND_MEMBER));
   }
 
   private Customer getByEmail(String email) {
     return customerRepository.findByEmail(email)
-        .orElseThrow(EntityNotFoundException::new);
+        .orElseThrow(() -> new NotFoundMemberException(ErrorCode.NOT_FOUND_MEMBER));
   }
 
   public CustomerLoginRes login(CustomerLoginReq loginReq) {
@@ -68,11 +68,10 @@ public class CustomerService {
   }
 
   private void checkDuplicatedEmail(String email) {
-    if(customerRepository.existsByMemberInfoEmailMailPath(email)) {
+    if (customerRepository.existsByMemberInfoEmailMailPath(email)) {
       throw new DuplicatedEmailException(ErrorCode.DUPLICATED_EMAIL);
     }
   }
-
 
 
 }

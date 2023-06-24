@@ -1,12 +1,9 @@
 package com.ticketing.domain.performance.entity;
 
 import static com.ticketing.global.exception.ErrorCode.NOT_AVAILABLE_AGE;
-import static com.ticketing.global.exception.ErrorCode.NOT_PERFORMANCE_MANAGER;
 
 import com.ticketing.domain.BaseTimeEntity;
 import com.ticketing.domain.member.admin.entity.Admin;
-import com.ticketing.domain.member.data.Role;
-import com.ticketing.domain.member.exception.UnauthorizedException;
 import com.ticketing.domain.performance.exception.NotAvalilableAgeException;
 import com.ticketing.domain.venue.entity.Venue;
 import jakarta.persistence.Column;
@@ -56,7 +53,6 @@ public class Performance extends BaseTimeEntity {
 
   public Performance(String title, String thumbnail, Schedule schedule, int viewingAge, Seat seat,
       Venue venue, Admin admin) {
-    validRole(admin);
     this.title = title;
     this.thumbnail = thumbnail;
     this.schedule = schedule;
@@ -64,12 +60,6 @@ public class Performance extends BaseTimeEntity {
     this.seat = seat;
     this.venue = venue;
     this.admin = admin;
-  }
-
-  private void validRole(Admin admin) {
-    if (!admin.getRole().equals(Role.ROLE_PERFORMANCE_MANAGER)) {
-      throw new UnauthorizedException(NOT_PERFORMANCE_MANAGER);
-    }
   }
 
   public Long getId() {
