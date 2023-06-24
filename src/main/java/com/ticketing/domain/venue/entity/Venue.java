@@ -2,9 +2,9 @@ package com.ticketing.domain.venue.entity;
 
 import static com.ticketing.global.exception.ErrorCode.NOT_VENUE_MANAGER;
 
+import com.ticketing.domain.member.Role;
 import com.ticketing.domain.member.admin.entity.Admin;
-import com.ticketing.domain.member.admin.entity.Role;
-import com.ticketing.domain.member.admin.exception.UnauthorizedException;
+import com.ticketing.domain.member.exception.UnauthorizedException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -82,7 +82,7 @@ public class Venue {
   }
 
   private void validRole(Admin admin) {
-    if (!admin.getRole().equals(Role.VENUE_MANAGER)) {
+    if (!admin.getRole().equals(Role.ROLE_VENUE_MANAGER)) {
       throw new UnauthorizedException(NOT_VENUE_MANAGER);
     }
   }
