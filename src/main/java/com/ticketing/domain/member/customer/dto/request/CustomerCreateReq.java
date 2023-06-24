@@ -1,8 +1,8 @@
 package com.ticketing.domain.member.customer.dto.request;
 
 import com.ticketing.domain.member.customer.entity.Customer;
-import com.ticketing.domain.member.MemberInfo;
-import com.ticketing.domain.member.Email;
+import com.ticketing.domain.member.data.MemberInfo;
+import com.ticketing.domain.member.data.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

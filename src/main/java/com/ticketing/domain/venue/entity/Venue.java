@@ -2,7 +2,8 @@ package com.ticketing.domain.venue.entity;
 
 import static com.ticketing.global.exception.ErrorCode.NOT_VENUE_MANAGER;
 
-import com.ticketing.domain.member.Role;
+import com.ticketing.domain.BaseTimeEntity;
+import com.ticketing.domain.member.data.Role;
 import com.ticketing.domain.member.admin.entity.Admin;
 import com.ticketing.domain.member.exception.UnauthorizedException;
 import jakarta.persistence.Column;
@@ -17,7 +18,7 @@ import java.util.regex.Pattern;
 import org.springframework.util.Assert;
 
 @Entity
-public class Venue {
+public class Venue extends BaseTimeEntity {
 
   private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^[0-9]+$");
   private static final String OUT_OF_FORMAT = "전화번호는 숫자만 입력 가능합니다";

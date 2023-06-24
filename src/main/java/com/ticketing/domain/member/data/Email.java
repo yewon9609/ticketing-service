@@ -1,4 +1,4 @@
-package com.ticketing.domain.member;
+package com.ticketing.domain.member.data;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

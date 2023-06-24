@@ -1,6 +1,6 @@
 package com.ticketing.domain.member.customer.service;
 
-import com.ticketing.domain.member.DuplicatedEmailException;
+import com.ticketing.domain.member.exception.DuplicatedEmailException;
 import com.ticketing.domain.member.customer.dto.request.CustomerCreateReq;
 import com.ticketing.domain.member.customer.dto.request.CustomerLoginReq;
 import com.ticketing.domain.member.customer.dto.response.CustomerCreateRes;
