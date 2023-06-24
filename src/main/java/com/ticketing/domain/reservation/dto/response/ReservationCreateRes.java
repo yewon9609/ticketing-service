@@ -1,4 +1,4 @@
-package com.ticketing.domain.reservation.dto;
+package com.ticketing.domain.reservation.dto.response;
 
 import com.ticketing.domain.reservation.entity.Reservation;
 

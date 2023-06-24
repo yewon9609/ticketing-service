@@ -1,4 +1,4 @@
-package com.ticketing.domain.reservation.dto;
+package com.ticketing.domain.reservation.dto.request;
 
 import com.ticketing.domain.member.customer.entity.Customer;
 import com.ticketing.domain.performance.entity.Performance;
