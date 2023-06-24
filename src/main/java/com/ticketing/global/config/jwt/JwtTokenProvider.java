@@ -2,8 +2,6 @@ package com.ticketing.global.config.jwt;
 
 import com.ticketing.global.config.jwt.CustomUserDetailService.CustomAdminDetailService;
 import com.ticketing.global.config.jwt.CustomUserDetailService.CustomCustomerDetailService;
-import com.ticketing.global.exception.BusinessException;
-import com.ticketing.global.exception.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -55,32 +53,6 @@ public interface JwtTokenProvider {
     } catch (IllegalArgumentException ex) {
       log.error("비어있는 토큰");
       throw new RuntimeException("비어있는 토큰");
-    }
-  }
-
-  default boolean validateRefreshToken(String refreshToken, String refreshTokenSecretKey,
-      Logger log) {
-    try {
-      Jwts.parserBuilder()
-          .setSigningKey(refreshTokenSecretKey)
-          .build()
-          .parseClaimsJws(refreshToken);
-      return true;
-    } catch (SignatureException ex) {
-      log.info("유효하지 않은 JWT 서명");
-      throw new BusinessException(ErrorCode.TOKEN_EXCEPTION);
-    } catch (MalformedJwtException ex) {
-      log.info("유효하지 않은 JWT 토큰");
-      throw new BusinessException(ErrorCode.TOKEN_EXCEPTION);
-    } catch (ExpiredJwtException ex) {
-      log.info("만료된 JWT 토큰");
-      throw new BusinessException(ErrorCode.TOKEN_EXCEPTION);
-    } catch (UnsupportedJwtException ex) {
-      log.info("지원하지 않는 JWT 토큰");
-      throw new BusinessException(ErrorCode.TOKEN_EXCEPTION);
-    } catch (IllegalArgumentException ex) {
-      log.info("비어있는 토큰");
-      throw new BusinessException(ErrorCode.TOKEN_EXCEPTION);
     }
   }
 
