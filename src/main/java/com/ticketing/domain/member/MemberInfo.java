@@ -1,19 +1,21 @@
 package com.ticketing.domain.member;
 
-import com.ticketing.domain.member.customer.entity.Email;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.validation.constraints.Min;
 import java.time.LocalDate;
 import java.util.Objects;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
 
 @Embeddable
 public class MemberInfo {
 
   private static final int CURRENT_YEAR = LocalDate.now().getYear();
+  private static final int KOREA_AGE = 1;
   private static final String BIRTH_YEAR_ERROR_MSG = "탄생년이 올바르지 않습니다";
+  private static final String PASSWORD_NOT_MATCH = "패스워드가 일치하지 않습니다";
 
   @Column(nullable = false, length = 30)
   private String name;
@@ -21,7 +23,7 @@ public class MemberInfo {
   @Embedded
   private Email email;
 
-  @Column(nullable = false, length = 30)
+  @Column(nullable = false)
   private String password;
 
   @Column(nullable = false)
@@ -43,12 +45,13 @@ public class MemberInfo {
     Assert.isTrue(CURRENT_YEAR >= birthYear, BIRTH_YEAR_ERROR_MSG);
   }
 
-  public String getName() {
-    return name;
+  public void checkPassword(PasswordEncoder passwordEncoder, String inputPassword) {
+    if (!passwordEncoder.matches(inputPassword, password))
+      throw new IllegalArgumentException(PASSWORD_NOT_MATCH);
   }
 
-  public Email getEmail() {
-    return email;
+  public String getName() {
+    return name;
   }
 
   public String getPassword() {
@@ -57,6 +60,16 @@ public class MemberInfo {
 
   public int getBirthYear() {
     return birthYear;
+  }
+
+  public int getAge() {
+    int currentYear = LocalDate.now()
+        .getYear();
+    return currentYear - birthYear + KOREA_AGE;
+  }
+
+  public String getMailPath() {
+    return email.getMailPath();
   }
 
 }
