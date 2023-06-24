@@ -1,17 +1,17 @@
 package com.ticketing.domain.member.customer.entity;
 
 import com.ticketing.domain.member.MemberInfo;
+import com.ticketing.domain.member.Role;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDate;
 
 @Entity
 public class Customer {
-
-  private static final int KOREA_AGE = 1;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +20,15 @@ public class Customer {
   @Embedded
   private MemberInfo memberInfo;
 
+  @Enumerated(value = EnumType.STRING)
+  private Role role;
+
   protected Customer() {
   }
 
   public Customer(MemberInfo memberInfo) {
     this.memberInfo = memberInfo;
+    this.role = Role.ROLE_CUSTOMER;
   }
 
   public Long getId() {
@@ -35,10 +39,8 @@ public class Customer {
     return memberInfo;
   }
 
-  public int getAge() {
-    int currentYear = LocalDate.now()
-        .getYear();
-    return currentYear - memberInfo.getBirthYear() + KOREA_AGE;
+  public Role getRole() {
+    return role;
   }
 
 }

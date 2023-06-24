@@ -5,9 +5,10 @@ import static org.springframework.http.HttpStatus.CREATED;
 import com.ticketing.domain.reservation.dto.ReservationCreateReq;
 import com.ticketing.domain.reservation.dto.ReservationCreateRes;
 import com.ticketing.domain.reservation.service.ReservationService;
+import com.ticketing.global.config.jwt.CustomUserDetails.CustomerInfo;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +24,13 @@ public class ReservationController {
     this.reservationService = reservationService;
   }
 
-  @PostMapping("/{customerId}")
+  @PostMapping
   public ResponseEntity<ReservationCreateRes> create(
       @RequestBody @Valid ReservationCreateReq createReq,
-      @PathVariable Long customerId
+      @AuthenticationPrincipal CustomerInfo customerInfo
   ) {
 
-    ReservationCreateRes createRes = reservationService.create(createReq, customerId);
+    ReservationCreateRes createRes = reservationService.create(createReq, customerInfo.getId());
 
     return ResponseEntity.status(CREATED)
         .body(createRes);

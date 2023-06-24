@@ -24,14 +24,15 @@ public class VenueService {
 
   @Transactional
   public VenueCreateRes creat(VenueCreateReq venueCreateReq, Long venueManagerId) {
-    Admin venueManager = adminService.getBy(venueManagerId);
-    Venue savedVenue = venueRepository.save(venueCreateReq.toEntity(venueManager));
+    Admin admin = adminService.getBy(venueManagerId);
+    Venue savedVenue = venueRepository.save(venueCreateReq.toEntity(admin));
 
     return VenueCreateRes.from(savedVenue);
   }
 
   public Venue getBy(Long id) {
-    return venueRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    return venueRepository.findById(id)
+        .orElseThrow(EntityNotFoundException::new);
   }
 
 }

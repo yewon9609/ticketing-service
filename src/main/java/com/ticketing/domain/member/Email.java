@@ -1,4 +1,4 @@
-package com.ticketing.domain.member.customer.entity;
+package com.ticketing.domain.member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -11,7 +11,7 @@ public class Email {
   private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-.]+@[\\w-]+.[\\w.]+$");
   private static final String OUT_OF_FORMAT = "이메일이 형식에 맞지 않습니다";
 
-  @Column(nullable = false, length = 50)
+  @Column(nullable = false, length = 50, unique = true)
   private String mailPath;
 
   protected Email() {

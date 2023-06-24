@@ -1,14 +1,15 @@
 package com.ticketing.domain.member.admin.dto.request;
 
+import com.ticketing.domain.member.Email;
 import com.ticketing.domain.member.MemberInfo;
+import com.ticketing.domain.member.Role;
 import com.ticketing.domain.member.admin.entity.Admin;
-import com.ticketing.domain.member.admin.entity.Role;
-import com.ticketing.domain.member.customer.entity.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public record AdminCreateReq(
 
@@ -36,9 +37,14 @@ public record AdminCreateReq(
 
 ) {
 
-  public Admin toEntity() {
+  public Admin toAdmin(PasswordEncoder encoder) {
     return new Admin(
-        new MemberInfo(name, new Email(mailPath), password, birthYear),
+        new MemberInfo(
+            name,
+            new Email(mailPath),
+            encoder.encode(password),
+            birthYear
+        ),
         businessLicense,
         role
     );

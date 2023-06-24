@@ -1,6 +1,7 @@
 package com.ticketing.domain.member.admin.entity;
 
 import com.ticketing.domain.member.MemberInfo;
+import com.ticketing.domain.member.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
