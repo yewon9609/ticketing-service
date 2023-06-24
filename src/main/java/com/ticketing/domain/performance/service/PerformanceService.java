@@ -4,6 +4,7 @@ import com.ticketing.domain.member.admin.entity.Admin;
 import com.ticketing.domain.member.admin.service.AdminService;
 import com.ticketing.domain.performance.dto.request.PerformanceCreateReq;
 import com.ticketing.domain.performance.dto.response.PerformanceCreateRes;
+import com.ticketing.domain.performance.dto.response.PerformanceDetailRes;
 import com.ticketing.domain.performance.entity.Performance;
 import com.ticketing.domain.performance.repository.PerformanceRepository;
 import com.ticketing.domain.venue.entity.Venue;
@@ -39,6 +40,11 @@ public class PerformanceService {
   public Performance getBy(Long performanceId) {
     return performanceRepository.findById(performanceId)
         .orElseThrow(EntityNotFoundException::new);
+  }
+
+  @Transactional
+  public PerformanceDetailRes getDetail(Long performanceId) {
+    return PerformanceDetailRes.from(getBy(performanceId));
   }
 
 }
