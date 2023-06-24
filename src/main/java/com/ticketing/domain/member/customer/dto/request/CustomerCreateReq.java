@@ -1,12 +1,13 @@
 package com.ticketing.domain.member.customer.dto.request;
 
-import com.ticketing.domain.member.MemberInfo;
 import com.ticketing.domain.member.customer.entity.Customer;
-import com.ticketing.domain.member.customer.entity.Email;
+import com.ticketing.domain.member.MemberInfo;
+import com.ticketing.domain.member.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public record CustomerCreateReq(
 
@@ -28,8 +29,9 @@ public record CustomerCreateReq(
 
 ) {
 
-  public Customer toEntity() {
-    return new Customer(new MemberInfo(name, new Email(email), password, birthYear));
+  public Customer toCustomer(PasswordEncoder encoder) {
+    return new Customer(
+        new MemberInfo(name, new Email(email), encoder.encode(password), birthYear));
   }
 
 }
