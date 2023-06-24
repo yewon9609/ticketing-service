@@ -1,8 +1,8 @@
 package com.ticketing.domain.member.admin.dto.request;
 
-import com.ticketing.domain.member.Email;
-import com.ticketing.domain.member.MemberInfo;
-import com.ticketing.domain.member.Role;
+import com.ticketing.domain.member.data.Email;
+import com.ticketing.domain.member.data.MemberInfo;
+import com.ticketing.domain.member.data.Role;
 import com.ticketing.domain.member.admin.entity.Admin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -20,7 +20,7 @@ public record AdminCreateReq(
     @NotBlank
     @Pattern(regexp = "^[\\w-.]+@[\\w-]+.[\\w.]+$")
     @Size(max = 50)
-    String mailPath,
+    String email,
 
     @NotBlank
     @Size(max = 30)
@@ -41,7 +41,7 @@ public record AdminCreateReq(
     return new Admin(
         new MemberInfo(
             name,
-            new Email(mailPath),
+            new Email(email),
             encoder.encode(password),
             birthYear
         ),
