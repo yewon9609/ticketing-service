@@ -1,6 +1,5 @@
 package com.ticketing.domain.reservation.service;
 
-import com.ticketing.domain.aop.annotation.DistributedLock;
 import com.ticketing.domain.member.customer.entity.Customer;
 import com.ticketing.domain.member.customer.service.CustomerService;
 import com.ticketing.domain.performance.entity.Performance;
@@ -9,6 +8,7 @@ import com.ticketing.domain.reservation.dto.ReservationCreateReq;
 import com.ticketing.domain.reservation.dto.ReservationCreateRes;
 import com.ticketing.domain.reservation.entity.Reservation;
 import com.ticketing.domain.reservation.repository.ReservationRepository;
+import com.ticketing.domain.aop.annotation.DistributedLock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
