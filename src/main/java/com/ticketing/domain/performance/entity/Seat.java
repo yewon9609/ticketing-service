@@ -1,7 +1,5 @@
 package com.ticketing.domain.performance.entity;
 
-import com.ticketing.domain.reservation.exception.NoMoreSeatsException;
-import com.ticketing.global.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
@@ -30,12 +28,8 @@ public class Seat {
     return capacity;
   }
 
-  public int subtractBy(int ticketCount) {
-    if (capacity < ticketCount) {
-      throw new NoMoreSeatsException(ErrorCode.NO_MORE_SEATS);
-    }
-    capacity = capacity - ticketCount;
-    return capacity;
+  public int updateCapacity(int capacity) {
+    return this.capacity = capacity;
   }
 
 }
