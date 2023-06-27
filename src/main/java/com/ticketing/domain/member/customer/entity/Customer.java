@@ -44,4 +44,8 @@ public class Customer extends BaseTimeEntity {
     return role;
   }
 
+  public int getAge() {
+    return memberInfo.getAge();
+  }
+
 }
