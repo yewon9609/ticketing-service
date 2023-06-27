@@ -7,11 +7,9 @@ import com.ticketing.domain.member.customer.dto.response.CustomerLoginRes;
 import com.ticketing.domain.member.customer.entity.Customer;
 import com.ticketing.domain.member.customer.repository.CustomerRepository;
 import com.ticketing.domain.member.exception.DuplicatedEmailException;
-import com.ticketing.domain.member.exception.NotFoundMemberException;
-import com.ticketing.global.config.jwt.JwtTokenProvider;
-import com.ticketing.global.config.jwt.JwtTokenProvider.CustomerJwtTokenProvider;
-import com.ticketing.global.exception.ErrorCode;
-import com.ticketing.infra.redis.util.RedisUtil;
+import com.ticketing.domain.member.exception.MemberNotFoundException;
+import com.ticketing.domain.token.dto.response.TokensRes;
+import com.ticketing.domain.token.service.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,15 +20,13 @@ public class CustomerService {
 
   private final CustomerRepository customerRepository;
   private final PasswordEncoder passwordEncoder;
-  private final RedisUtil redisUtil;
-  private final JwtTokenProvider jwtTokenProvider;
+  private final JwtService jwtService;
 
   public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder,
-      RedisUtil redisUtil, CustomerJwtTokenProvider customerJwtTokenProvider) {
+      JwtService jwtService) {
     this.customerRepository = customerRepository;
     this.passwordEncoder = passwordEncoder;
-    this.redisUtil = redisUtil;
-    this.jwtTokenProvider = customerJwtTokenProvider;
+    this.jwtService = jwtService;
   }
 
   @Transactional
@@ -40,36 +36,28 @@ public class CustomerService {
     return CustomerCreateRes.from(customer);
   }
 
-  public Customer getBy(Long id) {
+  public Customer getById(Long id) {
     return customerRepository.findById(id)
-        .orElseThrow(() -> new NotFoundMemberException(ErrorCode.NOT_FOUND_MEMBER));
+        .orElseThrow(MemberNotFoundException::new);
   }
 
   private Customer getByEmail(String email) {
     return customerRepository.findByEmail(email)
-        .orElseThrow(() -> new NotFoundMemberException(ErrorCode.NOT_FOUND_MEMBER));
+        .orElseThrow(MemberNotFoundException::new);
   }
 
   public CustomerLoginRes login(CustomerLoginReq loginReq) {
     Customer customer = getByEmail(loginReq.email());
     customer.getMemberInfo().checkPassword(passwordEncoder, loginReq.password());
 
-    String accessToken = jwtTokenProvider.createAccessToken(
-        customer.getId(),
-        jwtTokenProvider.getAccessTokenSecretKey()
-    );
-    String refreshToken = jwtTokenProvider.createRefreshToken(
-        jwtTokenProvider.getRefreshTokenSecretKey()
-    );
+    TokensRes token = jwtService.createToken(customer.getId());
 
-    redisUtil.setDataWithExpire(String.valueOf(customer.getId()), refreshToken);
-
-    return new CustomerLoginRes(accessToken, refreshToken);
+    return new CustomerLoginRes(token.accessToken(), token.refreshToken());
   }
 
   private void checkDuplicatedEmail(String email) {
     if (customerRepository.existsByMemberInfoEmailMailPath(email)) {
-      throw new DuplicatedEmailException(ErrorCode.DUPLICATED_EMAIL);
+      throw new DuplicatedEmailException();
     }
   }
 
