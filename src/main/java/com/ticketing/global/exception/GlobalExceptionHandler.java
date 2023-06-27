@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(AuthenticationException.class)
   public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException e) {
-    log.error("AuthenticationException : ", e);
+    log.info("AuthenticationException : ", e);
     ErrorCode errorCode = ErrorCode.AUTHENTICATION_FAILED;
     return ResponseEntity.status(errorCode.getCode())
         .body(new ErrorResponse(errorCode.getMessage()));
@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(AccessDeniedException.class)
   public ResponseEntity<ErrorResponse> accessDeniedExceptionHandler(AccessDeniedException e) {
-    log.error("AccessDeniedException : ", e);
+    log.info("AccessDeniedException : ", e);
     ErrorCode errorCode = ErrorCode.ACCESS_FAILED;
     return ResponseEntity.status(errorCode.getCode())
         .body(new ErrorResponse(errorCode.getMessage()));
