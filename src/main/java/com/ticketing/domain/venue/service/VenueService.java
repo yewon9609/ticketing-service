@@ -7,7 +7,6 @@ import com.ticketing.domain.venue.dto.response.VenueCreateRes;
 import com.ticketing.domain.venue.entity.Venue;
 import com.ticketing.domain.venue.exception.NotFoundVenueException;
 import com.ticketing.domain.venue.repository.VenueRepository;
-import com.ticketing.global.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,15 +24,15 @@ public class VenueService {
 
   @Transactional
   public VenueCreateRes creat(VenueCreateReq venueCreateReq, Long venueManagerId) {
-    Admin admin = adminService.getBy(venueManagerId);
+    Admin admin = adminService.getById(venueManagerId);
     Venue savedVenue = venueRepository.save(venueCreateReq.toEntity(admin));
 
     return VenueCreateRes.from(savedVenue);
   }
 
-  public Venue getBy(Long id) {
+  public Venue getById(Long id) {
     return venueRepository.findById(id)
-        .orElseThrow(() -> new NotFoundVenueException(ErrorCode.NOT_FOUND_VENUE));
+        .orElseThrow(NotFoundVenueException::new);
   }
 
 }

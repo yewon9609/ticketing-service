@@ -5,7 +5,7 @@ import com.ticketing.global.exception.ErrorCode;
 
 public class NotFoundVenueException extends BusinessException {
 
-  public NotFoundVenueException(ErrorCode errorCode) {
-    super(errorCode);
+  public NotFoundVenueException() {
+    super(ErrorCode.NOT_FOUND_VENUE);
   }
 }

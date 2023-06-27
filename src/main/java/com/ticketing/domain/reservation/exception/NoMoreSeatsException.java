@@ -5,8 +5,8 @@ import com.ticketing.global.exception.ErrorCode;
 
 public class NoMoreSeatsException extends BusinessException {
 
-  public NoMoreSeatsException(ErrorCode errorCode) {
-    super(errorCode);
+  public NoMoreSeatsException() {
+    super(ErrorCode.NO_MORE_SEATS);
   }
 
 }

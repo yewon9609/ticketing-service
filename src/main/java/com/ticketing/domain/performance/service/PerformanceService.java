@@ -8,11 +8,11 @@ import com.ticketing.domain.performance.dto.response.PerformanceDetailRes;
 import com.ticketing.domain.performance.dto.response.PerformanceRemainingSeatsRes;
 import com.ticketing.domain.performance.dto.response.PerformanceSimpleRes;
 import com.ticketing.domain.performance.entity.Performance;
-import com.ticketing.domain.performance.exception.NotFoundPerformanceException;
+import com.ticketing.domain.performance.exception.PerformanceNotFoundException;
 import com.ticketing.domain.performance.repository.PerformanceRepository;
 import com.ticketing.domain.venue.entity.Venue;
 import com.ticketing.domain.venue.service.VenueService;
-import com.ticketing.global.exception.ErrorCode;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -35,8 +35,8 @@ public class PerformanceService {
 
   @Transactional
   public PerformanceCreateRes create(PerformanceCreateReq createReq, Long adminId) {
-    Venue venue = venueService.getBy(createReq.venueId());
-    Admin admin = adminService.getBy(adminId);
+    Venue venue = venueService.getById(createReq.venueId());
+    Admin admin = adminService.getById(adminId);
     Performance performance = performanceRepository.save(createReq.toEntity(venue, admin));
 
     return PerformanceCreateRes.from(performance);
@@ -44,9 +44,10 @@ public class PerformanceService {
 
   public Performance get(Long performanceId) {
     return performanceRepository.findById(performanceId)
-        .orElseThrow(() -> new NotFoundPerformanceException(ErrorCode.NOT_FOUND_PERFORMANCE));
+        .orElseThrow(PerformanceNotFoundException::new);
   }
 
+  @Cacheable(key = "#id", value = "performanceDetails")
   @Transactional
   public PerformanceDetailRes getDetails(Long id) {
     return PerformanceDetailRes.from(get(id));
@@ -59,6 +60,19 @@ public class PerformanceService {
 
   public Slice<PerformanceSimpleRes> getList(Pageable pageable) {
     return performanceRepository.getList(pageable);
+  }
+
+  private Performance checkAvailabilityOfReservations(Long performanceId, int customerAge) {
+    Performance performance = get(performanceId);
+    performance.checkPossibleViewingAge(customerAge);
+
+    return performance;
+  }
+
+  public Performance subtractSeats(Long performanceId, int customerAge, int ticketCount) {
+    Performance performance = checkAvailabilityOfReservations(performanceId, customerAge);
+    performance.subtractBy(ticketCount);
+    return performance;
   }
 
 }

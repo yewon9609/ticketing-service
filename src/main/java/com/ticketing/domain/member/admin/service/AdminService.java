@@ -6,10 +6,9 @@ import com.ticketing.domain.member.admin.dto.response.AdminCreateRes;
 import com.ticketing.domain.member.admin.dto.response.AdminLoginRes;
 import com.ticketing.domain.member.admin.entity.Admin;
 import com.ticketing.domain.member.admin.repository.AdminRepository;
-import com.ticketing.domain.member.exception.NotFoundMemberException;
+import com.ticketing.domain.member.exception.MemberNotFoundException;
 import com.ticketing.global.config.jwt.JwtTokenProvider;
 import com.ticketing.global.config.jwt.JwtTokenProvider.AdminJwtTokenProvider;
-import com.ticketing.global.exception.ErrorCode;
 import com.ticketing.infra.redis.util.RedisUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,14 +37,14 @@ public class AdminService {
     return AdminCreateRes.from(admin);
   }
 
-  public Admin getBy(Long id) {
+  public Admin getById(Long id) {
     return adminRepository.findById(id)
-        .orElseThrow(() -> new NotFoundMemberException(ErrorCode.NOT_FOUND_MEMBER));
+        .orElseThrow(MemberNotFoundException::new);
   }
 
   private Admin getByEmail(String email) {
     return adminRepository.findByEmail(email)
-        .orElseThrow(() -> new NotFoundMemberException(ErrorCode.NOT_FOUND_MEMBER));
+        .orElseThrow(MemberNotFoundException::new);
   }
 
   public AdminLoginRes login(AdminLoginReq loginReq) {

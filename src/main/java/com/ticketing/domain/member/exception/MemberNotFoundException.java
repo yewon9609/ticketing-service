@@ -3,9 +3,9 @@ package com.ticketing.domain.member.exception;
 import com.ticketing.global.exception.BusinessException;
 import com.ticketing.global.exception.ErrorCode;
 
-public class NotFoundMemberException extends BusinessException {
+public class MemberNotFoundException extends BusinessException {
 
-  public NotFoundMemberException(ErrorCode errorCode) {
-    super(errorCode);
+  public MemberNotFoundException() {
+    super(ErrorCode.NOT_FOUND_MEMBER);
   }
 }

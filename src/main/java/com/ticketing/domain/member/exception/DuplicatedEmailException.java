@@ -5,7 +5,7 @@ import com.ticketing.global.exception.ErrorCode;
 
 public class DuplicatedEmailException extends BusinessException {
 
-  public DuplicatedEmailException(ErrorCode errorCode) {
-    super(errorCode);
+  public DuplicatedEmailException() {
+    super(ErrorCode.DUPLICATED_EMAIL);
   }
 }

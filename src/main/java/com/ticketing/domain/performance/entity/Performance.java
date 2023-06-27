@@ -1,10 +1,9 @@
 package com.ticketing.domain.performance.entity;
 
-import static com.ticketing.global.exception.ErrorCode.NOT_AVAILABLE_AGE;
-
 import com.ticketing.domain.BaseTimeEntity;
 import com.ticketing.domain.member.admin.entity.Admin;
-import com.ticketing.domain.performance.exception.NotAvalilableAgeException;
+import com.ticketing.domain.performance.exception.NotAvailableAgeException;
+import com.ticketing.domain.reservation.exception.NoMoreSeatsException;
 import com.ticketing.domain.venue.entity.Venue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -96,8 +95,15 @@ public class Performance extends BaseTimeEntity {
 
   public void checkPossibleViewingAge(int age) {
     if (viewingAge > age) {
-      throw new NotAvalilableAgeException(NOT_AVAILABLE_AGE);
+      throw new NotAvailableAgeException();
     }
+  }
+
+  public void subtractBy(int ticketCount) {
+    if (getSeat().getCapacity() < ticketCount) {
+      throw new NoMoreSeatsException();
+    }
+    getSeat().updateCapacity(getSeat().getCapacity() - ticketCount);
   }
 
 }
