@@ -2,6 +2,7 @@ package com.ticketing.domain.token.service;
 
 import com.ticketing.domain.token.dto.response.TokensRes;
 import com.ticketing.global.config.jwt.JwtTokenProvider;
+import com.ticketing.global.config.jwt.JwtTokenProvider.CustomerJwtTokenProvider;
 import com.ticketing.infra.redis.util.RedisUtil;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +10,9 @@ import org.springframework.stereotype.Service;
 public class JwtService {
 
   private final RedisUtil redisUtil;
-  private final JwtTokenProvider jwtTokenProvider;
+  private final CustomerJwtTokenProvider jwtTokenProvider;
 
-  public JwtService(RedisUtil redisUtil, JwtTokenProvider jwtTokenProvider) {
+  public JwtService(RedisUtil redisUtil, CustomerJwtTokenProvider jwtTokenProvider) {
     this.redisUtil = redisUtil;
     this.jwtTokenProvider = jwtTokenProvider;
   }
