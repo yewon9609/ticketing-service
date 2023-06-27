@@ -38,7 +38,6 @@ public class ReservationController {
       @RequestBody @Valid ReservationCreateReq createReq,
       @AuthenticationPrincipal CustomerInfo customerInfo
   ) {
-
     ReservationCreateRes createRes = reservationService.create(createReq, customerInfo.getId());
 
     return ResponseEntity.status(CREATED)
