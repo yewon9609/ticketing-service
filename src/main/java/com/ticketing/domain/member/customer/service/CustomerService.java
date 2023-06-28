@@ -8,8 +8,9 @@ import com.ticketing.domain.member.customer.entity.Customer;
 import com.ticketing.domain.member.customer.repository.CustomerRepository;
 import com.ticketing.domain.member.exception.DuplicatedEmailException;
 import com.ticketing.domain.member.exception.MemberNotFoundException;
-import com.ticketing.domain.token.dto.response.TokensRes;
-import com.ticketing.domain.token.service.JwtService;
+import com.ticketing.domain.member.token.dto.response.TokensRes;
+import com.ticketing.domain.member.token.service.CustomerJwtService;
+import com.ticketing.domain.member.token.service.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class CustomerService {
   private final JwtService jwtService;
 
   public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder,
-      JwtService jwtService) {
+      CustomerJwtService jwtService) {
     this.customerRepository = customerRepository;
     this.passwordEncoder = passwordEncoder;
     this.jwtService = jwtService;

@@ -7,9 +7,9 @@ import com.ticketing.domain.member.admin.dto.response.AdminLoginRes;
 import com.ticketing.domain.member.admin.entity.Admin;
 import com.ticketing.domain.member.admin.repository.AdminRepository;
 import com.ticketing.domain.member.exception.MemberNotFoundException;
-import com.ticketing.global.config.jwt.JwtTokenProvider;
-import com.ticketing.global.config.jwt.JwtTokenProvider.AdminJwtTokenProvider;
-import com.ticketing.infra.redis.util.RedisUtil;
+import com.ticketing.domain.member.token.dto.response.TokensRes;
+import com.ticketing.domain.member.token.service.AdminJwtService;
+import com.ticketing.domain.member.token.service.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,15 +20,13 @@ public class AdminService {
 
   private final AdminRepository adminRepository;
   private final PasswordEncoder passwordEncoder;
-  private final RedisUtil redisUtil;
-  private final JwtTokenProvider jwtTokenProvider;
+  private final JwtService jwtService;
 
-  public AdminService(AdminRepository repository, PasswordEncoder encoder, RedisUtil redisUtil,
-      AdminJwtTokenProvider adminJwtTokenProvider) {
+  public AdminService(AdminRepository repository, PasswordEncoder encoder,
+      AdminJwtService jwtService) {
     this.adminRepository = repository;
     this.passwordEncoder = encoder;
-    this.redisUtil = redisUtil;
-    this.jwtTokenProvider = adminJwtTokenProvider;
+    this.jwtService = jwtService;
   }
 
   @Transactional
@@ -51,18 +49,9 @@ public class AdminService {
     Admin admin = getByEmail(loginReq.email());
     admin.getMemberInfo().checkPassword(passwordEncoder, loginReq.password());
 
-    String accessToken = jwtTokenProvider.createAccessToken(
-        admin.getId(),
-        jwtTokenProvider.getAccessTokenSecretKey()
-    );
+    TokensRes token = jwtService.createToken(admin.getId());
 
-    String refreshToken = jwtTokenProvider.createRefreshToken(
-        jwtTokenProvider.getRefreshTokenSecretKey()
-    );
-
-    redisUtil.setDataWithExpire(String.valueOf(admin.getId()), refreshToken);
-
-    return new AdminLoginRes(accessToken, refreshToken);
+    return new AdminLoginRes(token.accessToken(), token.refreshToken());
   }
 
 }
