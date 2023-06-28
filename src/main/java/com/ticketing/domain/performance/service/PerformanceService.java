@@ -42,19 +42,19 @@ public class PerformanceService {
     return PerformanceCreateRes.from(performance);
   }
 
-  public Performance get(Long performanceId) {
+  public Performance getById(Long performanceId) {
     return performanceRepository.findById(performanceId)
         .orElseThrow(PerformanceNotFoundException::new);
   }
 
-  @Cacheable(key = "#id", value = "performanceDetails")
+  @Cacheable(key = "#id", value = "performanceDetailsId")
   @Transactional
   public PerformanceDetailRes getDetails(Long id) {
-    return PerformanceDetailRes.from(get(id));
+    return PerformanceDetailRes.from(getById(id));
   }
 
   public PerformanceRemainingSeatsRes getRemainingSeatsCount(Long id) {
-    return new PerformanceRemainingSeatsRes(get(id).getSeat()
+    return new PerformanceRemainingSeatsRes(getById(id).getSeat()
         .getCapacity());
   }
 
@@ -63,7 +63,7 @@ public class PerformanceService {
   }
 
   private Performance checkAvailabilityOfReservations(Long performanceId, int customerAge) {
-    Performance performance = get(performanceId);
+    Performance performance = getById(performanceId);
     performance.checkPossibleViewingAge(customerAge);
 
     return performance;
