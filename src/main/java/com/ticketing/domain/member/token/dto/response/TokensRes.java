@@ -1,4 +1,4 @@
-package com.ticketing.domain.token.dto.response;
+package com.ticketing.domain.member.token.dto.response;
 
 public record TokensRes(
     String accessToken,
