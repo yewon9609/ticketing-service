@@ -93,6 +93,10 @@ public class Performance extends BaseTimeEntity {
     return admin;
   }
 
+  public int getSeatCapacity() {
+    return seat.getCapacity();
+  }
+
   public void checkPossibleViewingAge(int age) {
     if (viewingAge > age) {
       throw new NotAvailableAgeException();
