@@ -42,7 +42,7 @@ public class PerformanceService {
     return PerformanceCreateRes.from(performance);
   }
 
-  public Performance getById(Long performanceId) {
+  private Performance getById(Long performanceId) {
     return performanceRepository.findById(performanceId)
         .orElseThrow(PerformanceNotFoundException::new);
   }
