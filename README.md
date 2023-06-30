@@ -17,7 +17,7 @@
 2. 조회 속도 향상
    - Redisson을 사용하고 있어 추가 인프라 구축이 필요없도록 Redis 캐시를 사용 
 3. JWT 도입
-   - scale out을 고려하였을 때 유저의 상태정보를 웹 계층에서 제거(stateless)해야겠다고 생각해 JWT를 도입하게 됨 
+   - scale out을 고려하였을 때 유저의 상태정보를 웹 계층에서 제거(stateless)해야겠다고 생각해 토큰 기반 인증을 도입함
 4. 고객 entity 설계
    - customer와 admin의 성격이 다르다고 생각해 테이블을 분리하는게 맞다고 판단. 같은 필드는 Embedded로 묶어 재사용 함
    - customer와 admin이 분리되다 보니 securityConfig 분리를 깨끗하게 하질 못함 (중복코드가 너무 많음)
