@@ -3,6 +3,7 @@ package com.ticketing.testFixture;
 import com.ticketing.domain.member.admin.dto.request.AdminCreateReq;
 import com.ticketing.domain.member.admin.entity.Admin;
 import com.ticketing.domain.member.customer.dto.request.CustomerCreateReq;
+import com.ticketing.domain.member.customer.entity.Customer;
 import com.ticketing.domain.member.data.Email;
 import com.ticketing.domain.member.data.MemberInfo;
 import com.ticketing.domain.member.data.Role;
@@ -178,6 +179,23 @@ public class TestFixture {
         100,
         "아트홀"
     );
+  }
+
+  public static Customer createCustomer() {
+    Customer customer = new Customer(
+      new MemberInfo(
+          name,
+          new Email("user2@naver.com"),
+          password,
+          birthYear
+      )
+    );
+
+    Field feild = ReflectionUtils.findField(Customer.class, "id");
+    feild.setAccessible(true);
+    ReflectionUtils.setField(feild, customer, 1L);
+
+    return customer;
   }
 
 
