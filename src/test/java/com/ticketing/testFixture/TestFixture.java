@@ -1,12 +1,15 @@
 package com.ticketing.testFixture;
 
 import com.ticketing.domain.member.admin.dto.request.AdminCreateReq;
+import com.ticketing.domain.member.admin.dto.request.AdminLoginReq;
 import com.ticketing.domain.member.admin.entity.Admin;
 import com.ticketing.domain.member.customer.dto.request.CustomerCreateReq;
+import com.ticketing.domain.member.customer.dto.request.CustomerLoginReq;
 import com.ticketing.domain.member.customer.entity.Customer;
 import com.ticketing.domain.member.data.Email;
 import com.ticketing.domain.member.data.MemberInfo;
 import com.ticketing.domain.member.data.Role;
+import com.ticketing.domain.member.token.dto.response.TokensRes;
 import com.ticketing.domain.performance.dto.request.PerformanceCreateReq;
 import com.ticketing.domain.performance.dto.response.PerformanceSimpleRes;
 import com.ticketing.domain.performance.entity.Performance;
@@ -23,6 +26,8 @@ public class TestFixture {
 
   private static final String name = "유저";
   private static final String email = "user1@gmail.com";
+  private static final String customerEmail = "customer1@gmail.com";
+  private static final String adminEmail = "admin1@gmail.com";
   private static final String password = "user1234!";
   private static final int birthYear = 2000;
   private static final String businessLicense = "L2-1112-1234";
@@ -185,7 +190,7 @@ public class TestFixture {
     Customer customer = new Customer(
       new MemberInfo(
           name,
-          new Email("user2@naver.com"),
+          new Email(customerEmail),
           password,
           birthYear
       )
@@ -198,5 +203,24 @@ public class TestFixture {
     return customer;
   }
 
+  public static CustomerLoginReq createCustomerLoginReq() {
+    return new CustomerLoginReq(
+        customerEmail,
+        password
+    );
+  }
 
+  public static TokensRes createTokenRes() {
+    return new TokensRes(
+        "rkWkdprtptmxhzms",
+        "rkWkflvmfptnlxhzms"
+    );
+  }
+
+  public static AdminLoginReq createAdminLoginReq() {
+    return new AdminLoginReq(
+        adminEmail,
+        password
+    );
+  }
 }
