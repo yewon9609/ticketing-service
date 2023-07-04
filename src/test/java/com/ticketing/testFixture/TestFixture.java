@@ -15,6 +15,7 @@ import com.ticketing.domain.performance.dto.response.PerformanceSimpleRes;
 import com.ticketing.domain.performance.entity.Performance;
 import com.ticketing.domain.performance.entity.Schedule;
 import com.ticketing.domain.performance.entity.Seat;
+import com.ticketing.domain.reservation.entity.Reservation;
 import com.ticketing.domain.venue.dto.request.VenueCreateReq;
 import com.ticketing.domain.venue.entity.Venue;
 import java.lang.reflect.Field;
@@ -188,17 +189,17 @@ public class TestFixture {
 
   public static Customer createCustomer() {
     Customer customer = new Customer(
-      new MemberInfo(
-          name,
-          new Email(customerEmail),
-          password,
-          birthYear
-      )
+        new MemberInfo(
+            name,
+            new Email(customerEmail),
+            password,
+            birthYear
+        )
     );
 
-    Field feild = ReflectionUtils.findField(Customer.class, "id");
-    feild.setAccessible(true);
-    ReflectionUtils.setField(feild, customer, 1L);
+    Field field = ReflectionUtils.findField(Customer.class, "id");
+    field.setAccessible(true);
+    ReflectionUtils.setField(field, customer, 1L);
 
     return customer;
   }
@@ -222,5 +223,20 @@ public class TestFixture {
         adminEmail,
         password
     );
+  }
+
+  public static Reservation createReservation(Performance performance, Customer customer,
+      int ticketCount, int totalCost) {
+    Reservation reservation = new Reservation(
+        performance,
+        customer,
+        ticketCount,
+        totalCost
+    );
+
+    Field field = ReflectionUtils.findField(Reservation.class, "id");
+    field.setAccessible(true);
+    ReflectionUtils.setField(field, reservation, 1L);
+    return reservation;
   }
 }
