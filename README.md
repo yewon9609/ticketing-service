@@ -1,6 +1,6 @@
 # numble-ticketing-service
 ## 프로젝트 설명 
-예매 서비스 구현 (인터파크 클론코딩) 
+예매 서비스 구현
 ## ERD
 ![ERD](https://github.com/yewon9609/ticketing-service/assets/99070762/596d7f79-4337-4128-9d04-dfe971ca0a1b)
 ## api명세서
