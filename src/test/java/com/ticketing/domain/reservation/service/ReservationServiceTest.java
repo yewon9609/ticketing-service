@@ -1,11 +1,11 @@
 package com.ticketing.domain.reservation.service;
 
-import static com.ticketing.testFixture.TestFixture.createCustomer;
+import static com.ticketing.testFixture.TestFixture.createCustomerWithId;
 import static com.ticketing.testFixture.TestFixture.createPerformance;
-import static com.ticketing.testFixture.TestFixture.createPerformanceManager;
+import static com.ticketing.testFixture.TestFixture.createPerformanceManagerWithId;
 import static com.ticketing.testFixture.TestFixture.createReservation;
-import static com.ticketing.testFixture.TestFixture.createVenue;
-import static com.ticketing.testFixture.TestFixture.createVenueManager;
+import static com.ticketing.testFixture.TestFixture.createVenueWithId;
+import static com.ticketing.testFixture.TestFixture.createVenueManagerWithId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -49,10 +49,10 @@ class ReservationServiceTest {
 
   @BeforeEach
   void setUp() {
-    customer = createCustomer();
-    venueManager = createVenueManager();
-    performanceManager = createPerformanceManager();
-    venue = createVenue(venueManager);
+    customer = createCustomerWithId();
+    venueManager = createVenueManagerWithId();
+    performanceManager = createPerformanceManagerWithId();
+    venue = createVenueWithId(venueManager);
     performance = createPerformance(venue, performanceManager);
   }
 

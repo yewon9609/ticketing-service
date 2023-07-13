@@ -85,7 +85,7 @@ public class TestFixture {
     );
   }
 
-  public static Venue createVenue(Admin admin) {
+  public static Venue createVenueWithId(Admin admin) {
     Venue venue = new Venue(
         "포은아트홀",
         "경기도 용인시 어쩌구 저쩌구",
@@ -100,7 +100,17 @@ public class TestFixture {
     return venue;
   }
 
-  public static Admin createPerformanceManager() {
+  public static Venue createVenue(Admin admin) {
+    return new Venue(
+        "포은아트홀",
+        "경기도 용인시 어쩌구 저쩌구",
+        "0101112222",
+        100,
+        admin
+    );
+  }
+
+  public static Admin createPerformanceManagerWithId() {
     Admin admin = new Admin(
         new MemberInfo(
             name,
@@ -119,7 +129,21 @@ public class TestFixture {
     return admin;
   }
 
-  public static Admin createVenueManager() {
+
+  public static Admin createPerformanceManager() {
+    return new Admin(
+        new MemberInfo(
+            name,
+            new Email("admin1@gmail.com"),
+            password,
+            birthYear
+        ),
+        businessLicense,
+        rolePerformanceManager
+    );
+  }
+
+  public static Admin createVenueManagerWithId() {
     Admin admin = new Admin(
         new MemberInfo(
             name,
@@ -137,6 +161,21 @@ public class TestFixture {
 
     return admin;
   }
+
+
+  public static Admin createVenueManager() {
+    return new Admin(
+        new MemberInfo(
+            name,
+            new Email("admin2@gmail.com"),
+            password,
+            birthYear
+        ),
+        businessLicense,
+        roleVenueManager
+    );
+  }
+
 
   public static Performance createPerformance(Admin admin, Venue venue) {
     return new Performance(
@@ -187,7 +226,7 @@ public class TestFixture {
     );
   }
 
-  public static Customer createCustomer() {
+  public static Customer createCustomerWithId() {
     Customer customer = new Customer(
         new MemberInfo(
             name,
@@ -202,6 +241,18 @@ public class TestFixture {
     ReflectionUtils.setField(field, customer, 1L);
 
     return customer;
+  }
+
+
+  public static Customer createCustomer() {
+    return new Customer(
+        new MemberInfo(
+            name,
+            new Email(customerEmail),
+            password,
+            birthYear
+        )
+    );
   }
 
   public static CustomerLoginReq createCustomerLoginReq() {

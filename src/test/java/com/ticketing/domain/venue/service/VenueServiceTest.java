@@ -1,7 +1,7 @@
 package com.ticketing.domain.venue.service;
 
-import static com.ticketing.testFixture.TestFixture.createVenue;
-import static com.ticketing.testFixture.TestFixture.createVenueManager;
+import static com.ticketing.testFixture.TestFixture.createVenueWithId;
+import static com.ticketing.testFixture.TestFixture.createVenueManagerWithId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -36,13 +36,13 @@ class VenueServiceTest {
 
   @BeforeEach
   void setUp() {
-    venueManager = createVenueManager();
+    venueManager = createVenueManagerWithId();
   }
 
   @DisplayName("공연장을 생성할 수 있다")
   @Test
   void test_create() {
-    Venue venue = createVenue(venueManager);
+    Venue venue = createVenueWithId(venueManager);
     VenueCreateRes expectedVenue = VenueCreateRes.from(venue);
     VenueCreateReq venueCreateReq = new VenueCreateReq(
         venue.getName(),

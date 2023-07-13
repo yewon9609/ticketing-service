@@ -1,6 +1,6 @@
 package com.ticketing.domain.member.customer.service;
 
-import static com.ticketing.testFixture.TestFixture.createCustomer;
+import static com.ticketing.testFixture.TestFixture.createCustomerWithId;
 import static com.ticketing.testFixture.TestFixture.createCustomerCreateReq;
 import static com.ticketing.testFixture.TestFixture.createCustomerLoginReq;
 import static com.ticketing.testFixture.TestFixture.createTokenRes;
@@ -16,7 +16,6 @@ import com.ticketing.domain.member.customer.entity.Customer;
 import com.ticketing.domain.member.customer.repository.CustomerRepository;
 import com.ticketing.domain.member.token.dto.response.TokensRes;
 import com.ticketing.domain.member.token.service.CustomerJwtService;
-import com.ticketing.domain.member.token.service.JwtService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,7 +41,7 @@ class CustomerServiceTest {
   @DisplayName("고객을 생성할 수 있다")
   @Test
   void test_create() {
-    Customer customer = createCustomer();
+    Customer customer = createCustomerWithId();
     CustomerCreateRes expectedCustomer = CustomerCreateRes.from(customer);
     CustomerCreateReq customerCreateReq = createCustomerCreateReq();
 
@@ -56,7 +55,7 @@ class CustomerServiceTest {
   @DisplayName("고객은 로그인 할 수 있다")
   @Test
   void test_login() {
-    Customer customer = createCustomer();
+    Customer customer = createCustomerWithId();
     CustomerLoginReq loginReq = createCustomerLoginReq();
     TokensRes tokensRes = createTokenRes();
     CustomerLoginRes expectedLoginRes = new CustomerLoginRes(

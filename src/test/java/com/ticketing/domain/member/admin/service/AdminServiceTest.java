@@ -1,7 +1,7 @@
 package com.ticketing.domain.member.admin.service;
 
 import static com.ticketing.testFixture.TestFixture.createAdminLoginReq;
-import static com.ticketing.testFixture.TestFixture.createPerformanceManager;
+import static com.ticketing.testFixture.TestFixture.createPerformanceManagerWithId;
 import static com.ticketing.testFixture.TestFixture.createPerformanceManagerCreateReq;
 import static com.ticketing.testFixture.TestFixture.createTokenRes;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,7 +41,7 @@ class AdminServiceTest {
   @DisplayName("공연 관리자를 생성할 수 있다")
   @Test
   void test_create() {
-    Admin performanceManager = createPerformanceManager();
+    Admin performanceManager = createPerformanceManagerWithId();
     AdminCreateRes expectedAdmin = AdminCreateRes.from(performanceManager);
     AdminCreateReq adminCreateReq = createPerformanceManagerCreateReq();
 
@@ -56,7 +56,7 @@ class AdminServiceTest {
   @DisplayName("관리자는 로그인 할 수 있다")
   @Test
   void test_login() {
-    Admin admin = createPerformanceManager();
+    Admin admin = createPerformanceManagerWithId();
     AdminLoginReq loginReq = createAdminLoginReq();
     TokensRes tokensRes = createTokenRes();
     AdminLoginRes expectedLoginRes = new AdminLoginRes(

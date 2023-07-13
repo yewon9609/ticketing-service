@@ -2,11 +2,11 @@ package com.ticketing.domain.performance.service;
 
 import static com.ticketing.testFixture.TestFixture.createPerformance;
 import static com.ticketing.testFixture.TestFixture.createPerformanceCreateReq;
-import static com.ticketing.testFixture.TestFixture.createPerformanceManager;
+import static com.ticketing.testFixture.TestFixture.createPerformanceManagerWithId;
 import static com.ticketing.testFixture.TestFixture.createPerformanceSimpleRes;
 import static com.ticketing.testFixture.TestFixture.createPerformanceWithId;
-import static com.ticketing.testFixture.TestFixture.createVenue;
-import static com.ticketing.testFixture.TestFixture.createVenueManager;
+import static com.ticketing.testFixture.TestFixture.createVenueWithId;
+import static com.ticketing.testFixture.TestFixture.createVenueManagerWithId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -54,9 +54,9 @@ class PerformanceServiceTest {
 
   @BeforeEach
   void setUp() {
-    venueManager = createVenueManager();
-    performanceManager = createPerformanceManager();
-    venue = createVenue(venueManager);
+    venueManager = createVenueManagerWithId();
+    performanceManager = createPerformanceManagerWithId();
+    venue = createVenueWithId(venueManager);
   }
 
   @DisplayName("공연 정보를 생성할 수 있다")
